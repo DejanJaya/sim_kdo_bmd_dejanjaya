@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "c1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+		"name": "SI-KDO BMD API Collection",
+		"description": "Koleksi lengkap REST API untuk Sistem Informasi Pengelolaan Kendaraan Dinas Operasional (KDO BMD) berbasis Laravel 12.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "POST Login Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+									"    pm.environment.set('token', jsonData.data.token);",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@kdo.go.id\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "GET Auth Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "POST Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Dashboard",
+			"item": [
+				{
+					"name": "GET Dashboard Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/summary",
+							"host": ["{{base_url}}"],
+							"path": ["api", "dashboard", "summary"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Kendaraan Dinas Operasional (KDO)",
+			"item": [
+				{
+					"name": "GET Daftar KDO (List & Search)",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/kdo?search=&kondisi=&status_penggunaan=",
+							"host": ["{{base_url}}"],
+							"path": ["api", "kdo"],
+							"query": [
+								{"key": "search", "value": ""},
+								{"key": "kondisi", "value": ""},
+								{"key": "status_penggunaan", "value": ""}
+							]
+						}
+					}
+				},
+				{
+					"name": "POST Tambah KDO Baru",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"perangkat_daerah_id\": 1,\n    \"pns_id\": 2,\n    \"nomor_polisi\": \"B 1999 PQD\",\n    \"kode_barang\": \"02.03.01.01.099\",\n    \"merk\": \"Toyota\",\n    \"tipe\": \"Kijang Innova Zenix 2.0 V\",\n    \"kategori\": \"Roda 4\",\n    \"tahun_produksi\": 2024,\n    \"warna\": \"Hitam Metalik\",\n    \"kondisi\": \"Baik\",\n    \"status_penggunaan\": \"Digunakan\",\n    \"nomor_rangka\": \"MHF11GB50P009124\",\n    \"nomor_mesin\": \"M20A-FKS-9912401\",\n    \"nomor_bpkb\": \"P-01928412\",\n    \"tanggal_pajak\": \"2027-06-15\",\n    \"keterangan\": \"Unit KDO baru pengadaan tahun anggaran berjalan.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/kdo",
+							"host": ["{{base_url}}"],
+							"path": ["api", "kdo"]
+						}
+					}
+				},
+				{
+					"name": "GET Detail KDO by ID",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/kdo/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "kdo", "1"]
+						}
+					}
+				},
+				{
+					"name": "PUT Update KDO",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"perangkat_daerah_id\": 1,\n    \"pns_id\": 2,\n    \"nomor_polisi\": \"B 1001 PQD\",\n    \"kode_barang\": \"02.03.01.01.001\",\n    \"merk\": \"Toyota\",\n    \"tipe\": \"Kijang Innova 2.0 V A/T\",\n    \"kategori\": \"Roda 4\",\n    \"tahun_produksi\": 2022,\n    \"warna\": \"Hitam Metalik\",\n    \"kondisi\": \"Baik\",\n    \"status_penggunaan\": \"Digunakan\",\n    \"nomor_rangka\": \"MHF11GB40K0012398\",\n    \"nomor_mesin\": \"1TR-FE-7892341\",\n    \"nomor_bpkb\": \"N-04581298\",\n    \"tanggal_pajak\": \"2026-12-15\",\n    \"keterangan\": \"Pembaruan keterangan berkala melalui REST API.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/kdo/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "kdo", "1"]
+						}
+					}
+				},
+				{
+					"name": "DELETE KDO",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/kdo/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "kdo", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Pegawai Negeri Sipil (PNS)",
+			"item": [
+				{
+					"name": "GET Daftar PNS",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/pns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pns"]
+						}
+					}
+				},
+				{
+					"name": "POST Tambah PNS Baru",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"perangkat_daerah_id\": 1,\n    \"nip\": \"19881020 201001 1 005\",\n    \"nama\": \"Muhammad Rizky, S.Kom.\",\n    \"jabatan\": \"Pranata Komputer Ahli Muda\",\n    \"golongan\": \"Penata (III/c)\",\n    \"no_telepon\": \"081299887711\",\n    \"email\": \"rizky.ti@pemda.go.id\",\n    \"status_pegawai\": \"Aktif\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pns"]
+						}
+					}
+				},
+				{
+					"name": "GET Detail PNS by ID",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/pns/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pns", "1"]
+						}
+					}
+				},
+				{
+					"name": "DELETE PNS (409 Conflict Protection Test)",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/pns/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pns", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Perangkat Daerah (PD)",
+			"item": [
+				{
+					"name": "GET Daftar Perangkat Daerah",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/perangkat-daerah",
+							"host": ["{{base_url}}"],
+							"path": ["api", "perangkat-daerah"]
+						}
+					}
+				},
+				{
+					"name": "POST Tambah Perangkat Daerah Baru",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kode_pd\": \"2.16.0.00.0.00.01.0000\",\n    \"nama_pd\": \"Dinas Komunikasi dan Informatika\",\n    \"singkatan\": \"Diskominfo\",\n    \"alamat\": \"Gedung B Lantai 2, Kantor Pemkab\",\n    \"telepon\": \"(021) 8769900\",\n    \"nama_kepala\": \"Ir. Wahyu Pratama, M.Kom.\",\n    \"nip_kepala\": \"19740510 199803 1 004\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/perangkat-daerah",
+							"host": ["{{base_url}}"],
+							"path": ["api", "perangkat-daerah"]
+						}
+					}
+				},
+				{
+					"name": "DELETE Perangkat Daerah (409 Conflict Protection Test)",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/perangkat-daerah/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "perangkat-daerah", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Riwayat Pemeliharaan & BAST",
+			"item": [
+				{
+					"name": "GET Daftar Riwayat Pemeliharaan",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/riwayat-pemeliharaan",
+							"host": ["{{base_url}}"],
+							"path": ["api", "riwayat-pemeliharaan"]
+						}
+					}
+				},
+				{
+					"name": "POST Catat Servis KDO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kdo_id\": 1,\n    \"tanggal_servis\": \"2026-11-10\",\n    \"jenis_pemeliharaan\": \"Ganti Kampas Rem & Tune Up Rutin\",\n    \"bengkel_pelaksana\": \"Auto2000 Juanda\",\n    \"biaya\": 1650000,\n    \"kondisi_sebelum\": \"Rusak Ringan\",\n    \"kondisi_setelah\": \"Baik\",\n    \"update_kdo_kondisi\": true,\n    \"deskripsi\": \"Penggantian brake pad depan dan servis berkala 50.000 KM.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/riwayat-pemeliharaan",
+							"host": ["{{base_url}}"],
+							"path": ["api", "riwayat-pemeliharaan"]
+						}
+					}
+				},
+				{
+					"name": "GET Riwayat BAST Pemegang",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/riwayat-pemegang",
+							"host": ["{{base_url}}"],
+							"path": ["api", "riwayat-pemegang"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Laporan Inventaris BMD",
+			"item": [
+				{
+					"name": "GET Rekapitulasi Laporan BMD",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}],
+						"url": {
+							"raw": "{{base_url}}/api/laporan/rekapitulasi?perangkat_daerah_id=&kondisi=&status_penggunaan=&kategori=",
+							"host": ["{{base_url}}"],
+							"path": ["api", "laporan", "rekapitulasi"],
+							"query": [
+								{"key": "perangkat_daerah_id", "value": ""},
+								{"key": "kondisi", "value": ""},
+								{"key": "status_penggunaan", "value": ""},
+								{"key": "kategori", "value": ""}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
