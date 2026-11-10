@@ -43,7 +43,7 @@ Sesuai instruksi dan batasan teknis wajib proyek:
 Untuk memudahkan verifikasi dan pengujian oleh penilai/evaluator:
 
 1. **Dump Database MySQL (Data Riil)**:
-   - File: [`database/dump/app_kdo_dump.sql`](./database/dump/app_kdo_dump.sql)
+   - File: [`database/dump/app_kdo.sql`](./database/dump/app_kdo.sql)
    - Berisi skema tabel lengkap beserta data awal realistis (OPD nyata, PNS dengan NIP BKN, dan kendaraan dinas operasional plat merah).
 2. **Koleksi REST API Postman**:
    - File: [`postman/SI-KDO_BMD.postman_collection.json`](./postman/SI-KDO_BMD.postman_collection.json)
@@ -210,7 +210,7 @@ Pengujian endpoint REST API laporan rekapitulasi inventaris KDO BMD lengkap deng
    ```bash
    php artisan migrate:fresh --seed
    ```
-   *(Atau impor langsung file dump SQL yang telah disediakan di `database/dump/app_kdo_dump.sql`)*
+   *(Atau impor langsung file dump SQL yang telah disediakan di `database/dump/app_kdo.sql`)*
 
 3. **Hubungkan Storage Symlink**:
    ```bash
